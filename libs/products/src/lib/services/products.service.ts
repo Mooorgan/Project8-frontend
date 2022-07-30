@@ -28,6 +28,8 @@ export class ProductsService {
     }
 
     updateProduct(productData: FormData, productId: string): Observable<Product> {
+        console.log(productData, productId);
+
         return this.http.put<Product>(`${this.apiURLProducts}/${productId}`, productData);
     }
 
@@ -43,5 +45,13 @@ export class ProductsService {
 
     getFeaturedProducts(count: number): Observable<Product[]> {
         return this.http.get<Product[]>(`${this.apiURLProducts}/get/featured/${count}`);
+    }
+
+    updatePics(productData: FormData, productId: string): Observable<Product> {
+        console.log(productData, productId);
+        return this.http.put<Product>(
+            `${this.apiURLProducts}/gallery-images/${productId}`,
+            productData
+        );
     }
 }

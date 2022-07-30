@@ -15,6 +15,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     loginFormGroup: FormGroup;
     isSubmitted = false;
     authError = false;
+    login = false;
+
     authMessage = 'Email or Password credentials are wrong!';
     endsubs$: Subject<any> = new Subject();
 
@@ -52,18 +54,33 @@ export class LoginComponent implements OnInit, OnDestroy {
                 (user) => {
                     this.authError = false;
                     this.localStorageService.setToken(user.token);
+                    const tokenDecode = JSON.parse(atob(user.token.split('.')[1]));
+
+                    if (!tokenDecode.isAdmin) {
+                        this.authError = true;
+                        this.authMessage = 'User is not Admin';
+                    } else {
+                        this.authError = false;
+                    }
+                    this.login = true;
                     this.router.navigate(['/']);
                 },
                 (error: HttpErrorResponse) => {
                     this.authError = true;
                     if (error.status !== 400) {
                         this.authMessage = 'Error in the Server! Please,try again later';
+                        this.login = false;
                     }
                 }
             );
+        this.auth.loginValue = this.login;
     }
 
     get loginForm() {
         return this.loginFormGroup.controls;
+    }
+
+    directToSignup() {
+        this.router.navigate(['/register']);
     }
 }

@@ -60,6 +60,14 @@
                         <div class="col-12" *ngIf="isSubmitted && authError">
                             <small class="p-error">{{ authMessage }}</small>
                         </div>
+                        <div class="col-12">
+                            Don't have an account? <br />
+                            <br />
+                            <p-button
+                                label="Signup"
+                                (onClick)="directToSignup()"
+                            ></p-button>
+                        </div>
                     </div>
                 </form>
             </div>

@@ -8,11 +8,11 @@ import { Subject } from 'rxjs';
 import { takeUntil, timer } from 'rxjs';
 
 @Component({
-    selector: 'admin-users-form',
-    templateUrl: './users-form.component.html',
+    selector: 'ngshop-register',
+    templateUrl: './register.component.html',
     styles: []
 })
-export class UsersFormComponent implements OnInit, OnDestroy {
+export class RegisterComponent implements OnInit, OnDestroy {
     form: FormGroup;
     isSubmitted = false;
     editmode = false;
@@ -31,7 +31,7 @@ export class UsersFormComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
         this._initUserForm();
         this._getCountries();
-        this._checkEditMode();
+        // this._checkEditMode();
     }
 
     ngOnDestroy(): void {
@@ -52,11 +52,11 @@ export class UsersFormComponent implements OnInit, OnDestroy {
             email: ['', [Validators.required, Validators.email]],
             phone: ['', Validators.required],
             isAdmin: [false],
-            street: [''],
-            apartment: [''],
-            zip: [''],
-            city: [''],
-            country: ['']
+            street: ['', Validators.required],
+            apartment: ['', Validators.required],
+            zip: ['', [Validators.required]],
+            city: ['', Validators.required],
+            country: ['', Validators.required]
         });
     }
 
@@ -101,55 +101,55 @@ export class UsersFormComponent implements OnInit, OnDestroy {
             );
     }
 
-    private _updateUser(user: User) {
-        this.usersService
-            .updateUser(user)
-            .pipe(takeUntil(this.endsubs$))
-            .subscribe(
-                () => {
-                    this.messageService.add({
-                        severity: 'success',
-                        summary: 'Success',
-                        detail: 'User is updated!'
-                    });
-                    timer(2000)
-                        .toPromise()
-                        .then(() => {
-                            this.location.back();
-                        });
-                },
-                () => {
-                    this.messageService.add({
-                        severity: 'error',
-                        summary: 'Error',
-                        detail: 'User is not updated!'
-                    });
-                }
-            );
-    }
+    // private _updateUser(user: User) {
+    //     this.usersService
+    //         .updateUser(user)
+    //         .pipe(takeUntil(this.endsubs$))
+    //         .subscribe(
+    //             () => {
+    //                 this.messageService.add({
+    //                     severity: 'success',
+    //                     summary: 'Success',
+    //                     detail: 'User is updated!'
+    //                 });
+    //                 timer(2000)
+    //                     .toPromise()
+    //                     .then(() => {
+    //                         this.location.back();
+    //                     });
+    //             },
+    //             () => {
+    //                 this.messageService.add({
+    //                     severity: 'error',
+    //                     summary: 'Error',
+    //                     detail: 'User is not updated!'
+    //                 });
+    //             }
+    //         );
+    // }
 
-    private _checkEditMode() {
-        this.route.params.pipe(takeUntil(this.endsubs$)).subscribe((params) => {
-            if (params.id) {
-                this.editmode = true;
-                this.currentUserId = params.id;
-                this.usersService.getUser(params.id).subscribe((user) => {
-                    this.userForm.name.setValue(user.name);
-                    this.userForm.email.setValue(user.email);
-                    this.userForm.phone.setValue(user.phone);
-                    this.userForm.isAdmin.setValue(user.isAdmin);
-                    this.userForm.street.setValue(user.street);
-                    this.userForm.apartment.setValue(user.apartment);
-                    this.userForm.zip.setValue(user.zip);
-                    this.userForm.city.setValue(user.city);
-                    this.userForm.country.setValue(user.country);
+    // private _checkEditMode() {
+    //     this.route.params.pipe(takeUntil(this.endsubs$)).subscribe((params) => {
+    //         if (params.id) {
+    //             this.editmode = true;
+    //             this.currentUserId = params.id;
+    //             this.usersService.getUser(params.id).subscribe((user) => {
+    //                 this.userForm.name.setValue(user.name);
+    //                 this.userForm.email.setValue(user.email);
+    //                 this.userForm.phone.setValue(user.phone);
+    //                 this.userForm.isAdmin.setValue(user.isAdmin);
+    //                 this.userForm.street.setValue(user.street);
+    //                 this.userForm.apartment.setValue(user.apartment);
+    //                 this.userForm.zip.setValue(user.zip);
+    //                 this.userForm.city.setValue(user.city);
+    //                 this.userForm.country.setValue(user.country);
 
-                    this.userForm.password.setValidators([]);
-                    this.userForm.password.updateValueAndValidity();
-                });
-            }
-        });
-    }
+    //                 this.userForm.password.setValidators([]);
+    //                 this.userForm.password.updateValueAndValidity();
+    //             });
+    //         }
+    //     });
+    // }
 
     onSubmit() {
         this.isSubmitted = true;
@@ -168,20 +168,15 @@ export class UsersFormComponent implements OnInit, OnDestroy {
             city: this.userForm.city.value,
             country: this.userForm.country.value
         };
-        if (this.editmode) {
-            if (this.userForm.password.value) {
-                user.password = this.userForm.password.value;
-                this._updateUser(user);
-            } else {
-                this._updateUser(user);
-            }
-        } else {
-            user.password = this.userForm.password.value;
-            this._addUser(user);
-        }
+        // if (this.editmode) {
+        //     this._updateUser(user);
+        // } else {
+        user.password = this.userForm.password.value;
+        this._addUser(user);
+        // }
     }
 
-    onCancle() {
+    onCancel() {
         this.location.back();
     }
 

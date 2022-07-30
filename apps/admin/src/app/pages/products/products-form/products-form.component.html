@@ -75,15 +75,32 @@
                                     >Price is required!</small
                                 >
                             </div>
+
+                            <div class="field col">
+                                <label for="priceMax">Maximum Price</label> <br />
+                                <p-inputNumber
+                                    formControlName="priceMax"
+                                    mode="decimal"
+                                    inputId="priceMaximum"
+                                    [useGrouping]="false"
+                                >
+                                </p-inputNumber>
+                                <br />
+                                <small
+                                    *ngIf="productForm.priceMax.invalid && isSubmitted"
+                                    class="p-error"
+                                    >Maximum Price is required!</small
+                                >
+                            </div>
                         </div>
                     </div>
-                    <div class="formgrid grid">
+                    <div div class="formgrid grid">
                         <div class="field col">
                             <label for="countInStock">Count In Stock</label> <br />
                             <p-inputNumber
                                 formControlName="countInStock"
                                 mode="decimal"
-                                inputId="price"
+                                inputId="count"
                                 [useGrouping]="false"
                             >
                             </p-inputNumber
@@ -115,6 +132,42 @@
                         </div>
                     </div>
 
+                    <div div class="formgrid grid">
+                        <div class="field col">
+                            <label for="thresholdCount">Views Threshold</label> <br />
+                            <p-inputNumber
+                                formControlName="thresholdCount"
+                                mode="decimal"
+                                inputId="viewsThreshold"
+                                [useGrouping]="false"
+                            >
+                            </p-inputNumber
+                            ><br />
+                            <small
+                                *ngIf="productForm.thresholdCount.invalid && isSubmitted"
+                                class="p-error"
+                                >Views Threshold is required!</small
+                            >
+                        </div>
+
+                        <div class="field col">
+                            <label for="timeCount">Time limit(seconds)</label> <br />
+                            <p-inputNumber
+                                formControlName="timeCount"
+                                mode="decimal"
+                                inputId="TimeCount"
+                                [useGrouping]="false"
+                            >
+                            </p-inputNumber
+                            ><br />
+                            <small
+                                *ngIf="productForm.timeCount.invalid && isSubmitted"
+                                class="p-error"
+                                >Time limit is required!</small
+                            >
+                        </div>
+                    </div>
+
                     <div class="field">
                         <label for="description">Description</label> <br />
                         <textarea
@@ -123,6 +176,7 @@
                             [rows]="7"
                             [cols]="120"
                         ></textarea>
+                        <br />
                         <small
                             *ngIf="productForm.description.invalid && isSubmitted"
                             class="p-error"
@@ -151,6 +205,31 @@
                         >
                         <div class="col-2 mt-2 pl-0">
                             <img style="width: 100%" [src]="imageDisplay" alt="" />
+                        </div>
+                        <br />
+                        <br />
+                        <div *ngIf="editMode">
+                            <label for="name">Secondary Images</label> <br />
+                            <br />
+                            <input
+                                type="file"
+                                class="p-inputtext"
+                                (change)="onImages($event)"
+                                multiple
+                            />
+                            <!-- <p-button
+                                styleClass="p-button-primary mr-2"
+                                label="Add Images"
+                                icon="pi pi-plus"
+                                (click)="onSubmitImages()"
+                            ></p-button> -->
+                        </div>
+                        <div
+                            class="col-2 mt-2 pl-0"
+                            *ngFor="let imageDisplay1 of imageDisplays"
+                        >
+                            <img style="width: 80px" [src]="imageDisplay1" alt="" />
+                            <br />
                         </div>
                     </div>
                 </form>

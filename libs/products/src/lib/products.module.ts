@@ -14,6 +14,7 @@ import { ProductPageComponent } from './pages/product-page/product-page.componen
 import { RatingModule } from 'primeng/rating';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { UiModule } from '@bluebits/ui';
+import { FilterPipe } from './pages/products-list/filter.pipe';
 
 const routes: Routes = [
     {
@@ -48,7 +49,8 @@ const routes: Routes = [
         ProductItemComponent,
         FeaturedProductsComponent,
         ProductsListComponent,
-        ProductPageComponent
+        ProductPageComponent,
+        FilterPipe
     ],
     exports: [
         ProductsSearchComponent,

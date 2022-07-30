@@ -22,11 +22,24 @@ import { JwtInterceptor, UsersModule } from '@bluebits/users';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { NgxStripeModule } from 'ngx-stripe';
+import { ButtonModule } from 'primeng/button';
+import { RegisterComponent } from './pages/register/register.component';
+
+import { CardModule } from 'primeng/card';
+import { ToolbarModule } from 'primeng/toolbar';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { InputMaskModule } from 'primeng/inputmask';
+import { InputSwitchModule } from 'primeng/inputswitch';
+import { DropdownModule } from 'primeng/dropdown';
 
 const routes: Routes = [
     {
         path: '',
         component: HomePageComponent
+    },
+    {
+        path: 'register',
+        component: RegisterComponent
     }
 ];
 
@@ -38,9 +51,20 @@ const routes: Routes = [
         HeaderComponent,
         FooterComponent,
         NavComponent,
-        MessagesComponent
+        MessagesComponent,
+        RegisterComponent
     ],
     imports: [
+        CardModule,
+        ToolbarModule,
+        FormsModule,
+        ReactiveFormsModule,
+        InputMaskModule,
+        InputSwitchModule,
+        DropdownModule,
+
+        ButtonModule,
+
         BrowserModule,
         ProductsModule,
         BrowserAnimationsModule,

@@ -6,9 +6,13 @@ export class Product {
     description?: string;
     richDescription?: string;
     image?: string;
-    images?: string;
+    images?: string[];
     brand?: string;
     price?: number;
+    priceMax?: number;
+    priceMin?: number;
+    thresholdCount?: number;
+    timeCount?: number;
     category?: Category;
     countInStock?: number;
     rating?: number;

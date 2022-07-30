@@ -18,6 +18,7 @@ export class ProductsFormComponent implements OnInit, OnDestroy {
     isSubmitted = false;
     categories = [];
     imageDisplay: string | ArrayBuffer;
+    imageDisplays = [];
     currentProductId: string;
     endsubs$: Subject<any> = new Subject();
 
@@ -45,12 +46,16 @@ export class ProductsFormComponent implements OnInit, OnDestroy {
             name: ['', Validators.required],
             brand: ['', Validators.required],
             price: ['', Validators.required],
+            priceMax: ['', Validators.required],
+            thresholdCount: ['', Validators.required],
+            timeCount: ['', Validators.required],
             category: ['', Validators.required],
             countInStock: ['', Validators.required],
             description: ['', Validators.required],
             richDescription: [''],
             image: ['', Validators.required],
-            isFeatured: [false]
+            isFeatured: [false],
+            images: ['']
         });
     }
 
@@ -123,15 +128,31 @@ export class ProductsFormComponent implements OnInit, OnDestroy {
                 this.editMode = true;
                 this.currentProductId = params.id;
                 this.productsService.getProduct(params.id).subscribe((product) => {
+                    console.log(product);
                     this.productForm.name.setValue(product.name);
                     this.productForm.category.setValue(product.category.id);
                     this.productForm.brand.setValue(product.brand);
                     this.productForm.price.setValue(product.price);
+                    this.productForm.priceMax.setValue(product.priceMax);
+                    this.productForm.thresholdCount.setValue(product.thresholdCount);
+                    this.productForm.timeCount.setValue(product.timeCount);
                     this.productForm.countInStock.setValue(product.countInStock);
                     this.productForm.isFeatured.setValue(product.isFeatured);
                     this.productForm.description.setValue(product.description);
                     this.productForm.richDescription.setValue(product.richDescription);
                     this.imageDisplay = product.image;
+                    if (product.images) {
+                        // for(let i=0;i<product.images.length;i++){
+                        //     this.imageDisplays.push();
+
+                        // }
+                        product.images.forEach((im) => {
+                            this.imageDisplays.push(im);
+                        });
+                    }
+                    this.productForm.images.setValidators([]);
+                    this.productForm.images.updateValueAndValidity();
+
                     this.productForm.image.setValidators([]);
                     this.productForm.image.updateValueAndValidity();
                 });
@@ -145,7 +166,6 @@ export class ProductsFormComponent implements OnInit, OnDestroy {
             return;
         }
         const productFormData = new FormData();
-
         Object.keys(this.productForm).map((key) => {
             productFormData.append(key, this.productForm[key].value);
         });
@@ -171,6 +191,66 @@ export class ProductsFormComponent implements OnInit, OnDestroy {
             };
             fileReader.readAsDataURL(file);
         }
+    }
+
+    onImages(e) {
+        if (e.target.files) {
+            const productFormData = new FormData();
+            for (let i = 0; i < e.target.files.length; i++) {
+                const fileReader = new FileReader();
+                fileReader.onload = () => {
+                    this.imageDisplays.push(fileReader.result);
+                };
+                fileReader.readAsDataURL(e.target.files[i]);
+
+                productFormData.append('images', e.target.files[i]);
+            }
+            this._onUpdateMultipleImages(productFormData);
+        }
+    }
+
+    // onSubmitImages() {
+    //     this.isSubmitted = true;
+    //     if (this.form.invalid) {
+    //         return;
+    //     }
+    //     const productFormData = new FormData();
+
+    //     Object.keys(this.productForm).map((key) => {
+    //         console.log(key);
+    //         console.log(this.productForm[key].value);
+    //         productFormData.append(key, this.productForm[key].value);
+    //     });
+    //     console.log(productFormData);
+    //     //  if (this.editMode) {
+    //     this._onUpdateMultipleImages(productFormData);
+    // }
+
+    private _onUpdateMultipleImages(productFormData: FormData) {
+        this.productsService
+            .updatePics(productFormData, this.currentProductId)
+            .pipe(takeUntil(this.endsubs$))
+            .subscribe(
+                (response) => {
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: 'Success',
+                        detail: 'Multiple pics are updated!'
+                    });
+                    // timer(2000)
+                    //     .toPromise()
+                    //     .then((done) => {
+                    //         this.location.back();
+                    //     });
+                },
+                (error) => {
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: 'Error',
+                        detail: 'Multiple pics cannot be updated!'
+                    });
+                }
+            );
     }
 
     get productForm() {
