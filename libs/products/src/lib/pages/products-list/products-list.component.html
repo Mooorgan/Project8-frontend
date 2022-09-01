@@ -30,7 +30,7 @@
             <div class="grid" *ngIf="products">
                 <div
                     [ngClass]="{ 'col-4': !isCategoryPage, 'col-3': isCategoryPage }"
-                    *ngFor="let product of products | filter: filteredProd:'name'"
+                    *ngFor="let product of products | filter: filteredProd"
                 >
                     <products-product-item [product]="product"></products-product-item>
                 </div>

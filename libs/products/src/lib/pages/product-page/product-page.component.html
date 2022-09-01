@@ -11,9 +11,9 @@
             </p>
             <div class="product-rating">
                 <p-rating
-                    [(ngModel)]="product.rating"
-                    [cancel]="false"
-                    [disabled]="true"
+                    [(ngModel)]="model"
+                    [disabled]="notLoggedIn"
+                    (onRate)="rated($event)"
                 ></p-rating>
             </div>
             <div class="product-price">
@@ -36,14 +36,15 @@
                 </div>
             </div>
             <div class="product-actions">
-                <button
+                <!-- <button
                     pButton
                     pRipple
                     type="button"
                     label="Buy Now"
                     class="p-button-rounded mr-2"
-                ></button>
+                ></button> -->
                 <button
+                    *ngIf="available"
                     pButton
                     pRipple
                     type="button"
@@ -51,6 +52,7 @@
                     class="p-button-rounded"
                     (click)="addProductToCart()"
                 ></button>
+                <h2 *ngIf="!available">Currently Out of Stock</h2>
             </div>
         </div>
     </div>
@@ -58,5 +60,53 @@
         <div class="col-12">
             <div [innerHTML]="product.richDescription"></div>
         </div>
+    </div>
+    <br />
+    <h2>Reviews:</h2>
+    <hr />
+    <br />
+    <br />
+    <div *ngIf="!notLoggedIn">
+        <p-avatar
+            icon="pi pi-user"
+            styleClass="mr-5"
+            size="large"
+            shape="circle"
+        ></p-avatar>
+        <textarea
+            rows="1"
+            cols="150"
+            pInputTextarea
+            autoResize="autoResize"
+            [(ngModel)]="text"
+        ></textarea>
+        <div class="grid">
+            <div class="col-11">
+                <p>
+                    <b>{{ nameOfUser }}</b>
+                </p>
+            </div>
+            <p-button label="Post" (onClick)="postReview($event)"></p-button>
+        </div>
+    </div>
+
+    <div *ngFor="let reviewItem of arrayReviews">
+        <div class="grid">
+            <div>
+                <p-avatar
+                    styleClass="mr-5 ml-3"
+                    [label]="reviewItem.name"
+                    size="large"
+                    shape="circle"
+                    [style]="{ 'background-color': '#2196F3', color: '#ffffff' }"
+                ></p-avatar>
+            </div>
+            <div>
+                <p>
+                    {{ reviewItem.review }}
+                </p>
+            </div>
+        </div>
+        <p></p>
     </div>
 </div>

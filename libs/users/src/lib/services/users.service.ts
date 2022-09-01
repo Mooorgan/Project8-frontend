@@ -70,4 +70,16 @@ export class UsersService {
     isCurrentUserAuth() {
         return this.usersFacade.currentUser$;
     }
+
+    getLocationService(): Promise<any> {
+        return new Promise((resolve, reject) => {
+            navigator.geolocation.getCurrentPosition((resp) => {
+                resolve({ lng: resp.coords.longitude, lat: resp.coords.latitude });
+            });
+        });
+    }
+
+    updateLocation(user: any): Observable<User> {
+        return this.http.put<any>(`${this.apiURLUsers}/locate/${user.id}`, user);
+    }
 }

@@ -11,22 +11,30 @@
                     <h5>Order Date</h5>
                     <p>{{ order.dateOrdered | date: 'short' }}</p>
                 </div>
-                <div class="col-4">
+                <!-- <div class="col-4">
                     <h5>Order Status</h5>
-                    <p-dropdown
+                    <br />
+                    <p>{{ name }}</p>
+                    <p>
+                        <p-dropdown
                         [options]="orderStatuses"
                         optionLabel="name"
-                        (onChange)="onStatusChange($event)"
                         optionValue="id"
                         [(ngModel)]="selectedStatus"
-                    ></p-dropdown>
-                </div>
+                    ></p-dropdown> -->
+                <!-- <p-button [label]="name"></p-button> -->
+                <!-- </p>-->
+                <!--</div> -->
+                <br />
+
                 <div class="col-4">
                     <h5>Order Total Price</h5>
                     <p>{{ order.totalPrice | currency }}</p>
                 </div>
             </div>
         </p-fieldset>
+        <br />
+        <br />
         <p-fieldset legend="Order Items" styleClass="mb-4" [toggleable]="true">
             <div class="grid mb-5">
                 <div class="col-2 font-bold">Name</div>

@@ -3,6 +3,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule, Routes } from '@angular/router';
 
+import { AgmCoreModule } from '@agm/core';
+
 import { AppComponent } from './app.component';
 import { NxWelcomeComponent } from './nx-welcome.component';
 import { HomePageComponent } from './pages/home-page/home-page.component';
@@ -31,15 +33,34 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InputMaskModule } from 'primeng/inputmask';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { DropdownModule } from 'primeng/dropdown';
+import { TableModule } from 'primeng/table';
+import { TagModule } from 'primeng/tag';
+
+import { SettingComponent } from './pages/setting/setting.component';
+import { OrderhistoryComponent } from './pages/orderhistory/orderhistory.component';
+import { OrderhistorydetailComponent } from './pages/orderhistorydetail/orderhistorydetail.component';
 
 const routes: Routes = [
     {
         path: '',
         component: HomePageComponent
     },
+
     {
         path: 'register',
         component: RegisterComponent
+    },
+    {
+        path: 'settings',
+        component: SettingComponent
+    },
+    {
+        path: 'orderhistory',
+        component: OrderhistoryComponent
+    },
+    {
+        path: 'orderhistorydetail/:id',
+        component: OrderhistorydetailComponent
     }
 ];
 
@@ -52,9 +73,15 @@ const routes: Routes = [
         FooterComponent,
         NavComponent,
         MessagesComponent,
-        RegisterComponent
+        RegisterComponent,
+        SettingComponent,
+        OrderhistoryComponent,
+        OrderhistorydetailComponent
     ],
     imports: [
+        AgmCoreModule.forRoot({
+            apiKey: 'AIzaSyAhYG3y_QQQHJK9vYYTqkRDhs3ES5Dghhk'
+        }),
         CardModule,
         ToolbarModule,
         FormsModule,
@@ -64,6 +91,8 @@ const routes: Routes = [
         DropdownModule,
 
         ButtonModule,
+        TableModule,
+        TagModule,
 
         BrowserModule,
         ProductsModule,

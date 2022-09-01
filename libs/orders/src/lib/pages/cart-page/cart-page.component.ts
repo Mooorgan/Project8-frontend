@@ -14,6 +14,7 @@ export class CartPageComponent implements OnInit, OnDestroy {
     cartItemsDetailed: CartItemDetailed[] = [];
     cartCount = 0;
     endsubs$: Subject<any> = new Subject();
+    max;
 
     constructor(
         private router: Router,
@@ -55,12 +56,32 @@ export class CartPageComponent implements OnInit, OnDestroy {
     }
 
     updateCartItemQuantity(event, cartItem: CartItemDetailed) {
-        this.cartService.setCartItem(
-            {
-                productId: cartItem.product.id,
-                quantity: event.value
-            },
-            true
-        );
+        this.max = cartItem.product.countInStock;
+        console.log(event);
+        if (event.value === 0 || event.value < 0 || event.value === null) {
+            this.cartService.setCartItem(
+                {
+                    productId: cartItem.product.id,
+                    quantity: 1
+                },
+                true
+            );
+        } else if (event.value > this.max) {
+            this.cartService.setCartItem(
+                {
+                    productId: cartItem.product.id,
+                    quantity: this.max
+                },
+                true
+            );
+        } else {
+            this.cartService.setCartItem(
+                {
+                    productId: cartItem.product.id,
+                    quantity: event.value
+                },
+                true
+            );
+        }
     }
 }

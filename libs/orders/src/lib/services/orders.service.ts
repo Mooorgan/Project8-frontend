@@ -74,4 +74,8 @@ export class OrdersService {
     removeCachedOrderData() {
         localStorage.removeItem('orderData');
     }
+
+    getUserOrders(userID: string): Observable<Order[]> {
+        return this.http.get<Order[]>(`${this.apiURLOrders}/get/userorders/${userID}`);
+    }
 }

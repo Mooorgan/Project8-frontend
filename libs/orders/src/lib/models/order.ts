@@ -14,4 +14,6 @@ export class Order {
     totalPrice?: string;
     user?: any;
     dateOrdered?: string;
+    latitude?: string;
+    longitude?: string;
 }

@@ -17,6 +17,8 @@ import { ThankYouComponent } from './pages/thank-you/thank-you.component';
 // import { AuthGuard, AuthGuardCustomerService } from '@bluebits/users';
 import { AuthGuardCustomerService } from '@bluebits/users';
 
+import { AgmCoreModule } from '@agm/core';
+
 export const routes: Route[] = [
     {
         path: 'cart',
@@ -35,6 +37,9 @@ export const routes: Route[] = [
 
 @NgModule({
     imports: [
+        AgmCoreModule.forRoot({
+            apiKey: 'AIzaSyAhYG3y_QQQHJK9vYYTqkRDhs3ES5Dghhk'
+        }),
         CommonModule,
         RouterModule,
         BadgeModule,

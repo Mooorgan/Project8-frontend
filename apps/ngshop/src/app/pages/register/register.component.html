@@ -14,7 +14,7 @@
                         ></p-button>
                         <p-button
                             styleClass="p-button-secondary"
-                            label="Cancle"
+                            label="Cancel"
                             icon="pi pi-arrow-circle-left"
                             (click)="onCancel()"
                         ></p-button>
@@ -38,7 +38,7 @@
                             <small
                                 *ngIf="userForm.name.invalid && isSubmitted"
                                 class="p-error"
-                                >Name is required or only letter alowed(max=18)</small
+                                >Name is required or only letter allowed(max=18)</small
                             >
                         </div>
                         <div class="field col-4">
@@ -168,7 +168,7 @@
                                 [showClear]="true"
                                 placeholder="Select a Country"
                             ></p-dropdown>
-                            <br />
+
                             <small
                                 *ngIf="userForm.country.invalid && isSubmitted"
                                 class="p-error"
@@ -176,6 +176,27 @@
                             >
                         </div>
                     </div>
+                    <h2>Mark your Location</h2>
+                    <br />
+                    <small
+                        *ngIf="userForm.latitude.invalid && isSubmitted"
+                        class="p-error"
+                        >Location is required!</small
+                    >
+                    <br />
+                    <agm-map
+                        [zoom]="13"
+                        [latitude]="latitude_p"
+                        [longitude]="longitude_p"
+                        (mapClick)="onChooseLocation($event)"
+                    >
+                        <agm-marker
+                            *ngIf="locationChosen"
+                            [latitude]="latitude_p"
+                            [longitude]="longitude_p"
+                        >
+                        </agm-marker>
+                    </agm-map>
                 </form>
             </div>
         </div>

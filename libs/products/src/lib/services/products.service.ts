@@ -54,4 +54,37 @@ export class ProductsService {
             productData
         );
     }
+
+    updateGeoLocation(productData: any, productId: string): Observable<Product> {
+        console.log(productData, productId);
+
+        return this.http.put<any>(`${this.apiURLProducts}/geo/${productId}`, productData);
+    }
+
+    delGeoLocation(productData: any, productId: string): Observable<Product> {
+        console.log(productData, productId);
+
+        return this.http.put<any>(
+            `${this.apiURLProducts}/delgeo/${productId}`,
+            productData
+        );
+    }
+
+    updateRating(productData: any, productId: string): Observable<Product> {
+        console.log(productData, productId);
+
+        return this.http.put<any>(
+            `${this.apiURLProducts}/rating/${productId}`,
+            productData
+        );
+    }
+
+    addReview(productData: any, productId: string): Observable<Product> {
+        console.log(productData, productId);
+
+        return this.http.put<any>(
+            `${this.apiURLProducts}/review/${productId}`,
+            productData
+        );
+    }
 }

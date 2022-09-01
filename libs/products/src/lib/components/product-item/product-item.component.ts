@@ -9,10 +9,15 @@ import { Product } from '../../models/product';
 })
 export class ProductItemComponent implements OnInit {
     @Input() product: Product;
+    available = true;
 
     constructor(private cartService: CartService) {}
 
-    ngOnInit(): void {}
+    ngOnInit(): void {
+        if (this.product.countInStock === 0) {
+            this.available = false;
+        }
+    }
 
     addProductToCart() {
         const cartItem: CartItem = {

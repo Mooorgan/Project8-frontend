@@ -22,6 +22,9 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
     userId: string;
     countries = [];
     unsubscribe$: Subject<any> = new Subject();
+    latitude_p = 27.673007134040933;
+    longitude_p = 85.31179482383641;
+    locationChosen = false;
 
     constructor(
         private router: Router,
@@ -43,6 +46,20 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
         this.unsubscribe$.complete();
     }
 
+    // prettier-ignore
+    onChooseLocation(event) {
+        this.longitude_p = event.coords.lng;
+        this.latitude_p = event.coords.lat;
+        // prettier-ignore
+        this.checkoutForm.latitude.patchValue(event.coords.lat);
+        this.checkoutForm.longitude.patchValue(event.coords.lng);
+        // this.userForm.latitude= event.coords.lat;
+        // this.userForm.longitude = event.coords.lng,
+        this.locationChosen = true;
+        console.log(this.checkoutForm);
+        console.log(event);
+    }
+
     private _initCheckoutForm() {
         this.checkoutFormGroup = this.formBuilder.group({
             name: ['', Validators.required],
@@ -52,7 +69,9 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
             country: ['', Validators.required],
             zip: ['', Validators.required],
             apartment: ['', Validators.required],
-            street: ['', Validators.required]
+            street: ['', Validators.required],
+            latitude: ['', Validators.required],
+            longitude: ['', Validators.required]
         });
     }
 
@@ -71,6 +90,8 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
                     this.checkoutForm.zip.setValue(user.zip);
                     this.checkoutForm.apartment.setValue(user.apartment);
                     this.checkoutForm.street.setValue(user.street);
+                    // this.checkoutForm.longitude.setValue('');
+                    // this.checkoutForm.latitude.setValue('');
                 }
             });
     }
@@ -111,7 +132,9 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
             phone: this.checkoutForm.phone.value,
             status: 0,
             user: this.userId,
-            dateOrdered: `${Date.now()}`
+            dateOrdered: `${Date.now()}`,
+            longitude: this.checkoutForm.longitude.value,
+            latitude: this.checkoutForm.latitude.value
         };
 
         this.ordersService.cacheOrderData(order);

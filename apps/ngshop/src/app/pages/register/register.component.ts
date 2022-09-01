@@ -20,6 +20,24 @@ export class RegisterComponent implements OnInit, OnDestroy {
     countries = [];
     endsubs$: Subject<any> = new Subject();
 
+    latitude_p = 27.673007134040933;
+    longitude_p = 85.31179482383641;
+    locationChosen = false;
+
+    // prettier-ignore
+    onChooseLocation(event) {
+        this.longitude_p = event.coords.lng;
+        this.latitude_p = event.coords.lat;
+        // prettier-ignore
+        this.userForm.latitude.patchValue(event.coords.lat);
+        this.userForm.longitude.patchValue(event.coords.lng);
+        // this.userForm.latitude= event.coords.lat;
+        // this.userForm.longitude = event.coords.lng,
+        this.locationChosen = true;
+        console.log(this.userForm);
+        console.log(event);
+    }
+
     constructor(
         private messageService: MessageService,
         private formBuilder: FormBuilder,
@@ -56,7 +74,9 @@ export class RegisterComponent implements OnInit, OnDestroy {
             apartment: ['', Validators.required],
             zip: ['', [Validators.required]],
             city: ['', Validators.required],
-            country: ['', Validators.required]
+            country: ['', Validators.required],
+            latitude: ['', Validators.required],
+            longitude: ['', Validators.required]
         });
     }
 
@@ -153,6 +173,9 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
     onSubmit() {
         this.isSubmitted = true;
+        console.log(this.form.invalid);
+        console.log(this.userForm.latitude.value, 'value');
+        console.log(this.userForm.latitude, 'latitude');
         if (this.form.invalid) {
             return;
         }
@@ -166,11 +189,15 @@ export class RegisterComponent implements OnInit, OnDestroy {
             apartment: this.userForm.apartment.value,
             zip: this.userForm.zip.value,
             city: this.userForm.city.value,
-            country: this.userForm.country.value
+            country: this.userForm.country.value,
+            latitude: this.userForm.latitude.value,
+            longitude: this.userForm.longitude.value
         };
         // if (this.editmode) {
         //     this._updateUser(user);
         // } else {
+        console.log(this.userForm.latitude.value, 'value');
+        console.log(this.userForm.latitude, 'latitude');
         user.password = this.userForm.password.value;
         this._addUser(user);
         // }

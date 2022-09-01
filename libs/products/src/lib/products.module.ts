@@ -15,6 +15,9 @@ import { RatingModule } from 'primeng/rating';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { UiModule } from '@bluebits/ui';
 import { FilterPipe } from './pages/products-list/filter.pipe';
+import { MessageService } from 'primeng/api';
+import { AvatarModule } from 'primeng/avatar';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 
 const routes: Routes = [
     {
@@ -41,7 +44,9 @@ const routes: Routes = [
         FormsModule,
         RatingModule,
         InputNumberModule,
-        UiModule
+        UiModule,
+        AvatarModule,
+        InputTextareaModule
     ],
     declarations: [
         ProductsSearchComponent,
@@ -59,6 +64,7 @@ const routes: Routes = [
         FeaturedProductsComponent,
         ProductsListComponent,
         ProductPageComponent
-    ]
+    ],
+    providers: [MessageService]
 })
 export class ProductsModule {}

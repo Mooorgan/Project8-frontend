@@ -20,7 +20,9 @@ export class ProductsFormComponent implements OnInit, OnDestroy {
     imageDisplay: string | ArrayBuffer;
     imageDisplays = [];
     currentProductId: string;
+    currentCategoryId;
     endsubs$: Subject<any> = new Subject();
+    loaded = false;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -41,6 +43,52 @@ export class ProductsFormComponent implements OnInit, OnDestroy {
         this.endsubs$.complete();
     }
 
+    latitude_p;
+    longitude_p;
+    locationChosen = false;
+
+    myLocations: Array<any> = [1];
+    // prettier-ignore
+    onChooseLocation(event) {
+        // console.log(myLocations.length);
+        if (this.myLocations.length==5 || this.myLocations.length>5){
+           return;
+            //  myLocations = [
+            //      { lat: 7.423568, lng: 80.462287 },
+            //      { lat: 7.532321, lng: 81.021187 },
+            //      { lat: 6.11701, lng: 80.126269 },
+            //      { lat: 6.11701, lng: 80.126269 }
+            //  ];
+        } 
+         this.myLocations.push({
+             lat: event.coords.lat,
+             lng: event.coords.lng
+         });
+         
+        console.log(this.myLocations.length);
+        console.log(this.myLocations);
+
+        const test = {
+            coordinates: [
+                [
+                    [85.299448, 27.736671],
+                    [85.364723, 27.726947],
+                    [85.351668, 27.65946],
+                    [85.27059, 27.663109],
+                    [85.299448, 27.736671]
+                ]
+            ]
+        }; 
+        console.log(test.coordinates[0][0][1]);
+        
+
+        
+        // this.latitude_p = event.coords.lat;
+        // this.longitude_p = event.coords.lng;
+        this.locationChosen = true;
+        // console.log(event);
+    }
+
     private _initForm() {
         this.form = this.formBuilder.group({
             name: ['', Validators.required],
@@ -52,6 +100,7 @@ export class ProductsFormComponent implements OnInit, OnDestroy {
             category: ['', Validators.required],
             countInStock: ['', Validators.required],
             description: ['', Validators.required],
+            keywords: ['', Validators.required],
             richDescription: [''],
             image: ['', Validators.required],
             isFeatured: [false],
@@ -124,13 +173,16 @@ export class ProductsFormComponent implements OnInit, OnDestroy {
 
     private _checkEditMode() {
         this.route.params.pipe(takeUntil(this.endsubs$)).subscribe((params) => {
+            console.log('hellfsdjfsldkjfsldkjf');
             if (params.id) {
                 this.editMode = true;
                 this.currentProductId = params.id;
                 this.productsService.getProduct(params.id).subscribe((product) => {
                     console.log(product);
                     this.productForm.name.setValue(product.name);
-                    this.productForm.category.setValue(product.category.id);
+                    this.productForm.category.setValue(product.category);
+                    this.currentCategoryId = product.category;
+                    console.log(this.currentCategoryId);
                     this.productForm.brand.setValue(product.brand);
                     this.productForm.price.setValue(product.price);
                     this.productForm.priceMax.setValue(product.priceMax);
@@ -139,7 +191,68 @@ export class ProductsFormComponent implements OnInit, OnDestroy {
                     this.productForm.countInStock.setValue(product.countInStock);
                     this.productForm.isFeatured.setValue(product.isFeatured);
                     this.productForm.description.setValue(product.description);
+                    this.productForm.keywords.setValue(product.keywords);
                     this.productForm.richDescription.setValue(product.richDescription);
+                    console.log('sldkjfslkdjflskdjflsdkjf');
+                    // console.log(product.location.coordinates.length);
+                    // console.log(product.location.coordinates.length);
+                    // console.log(product.location.coordinates[0][0].length);
+                    // console.log(product?.location?.coordinates[0][0]?.length);
+                    // console.log(product?.location?.coordinates[0][1][0] == undefined);
+                    // console.log('hellodsicfjsdofjsodjf');
+                    // if (product.location.coordinates.length != 0) {
+                    const after = product.location?.coordinates;
+                    console.log(after, 'after---------------------');
+                    if (after) {
+                        console.log('inside!!!');
+                        // if (product.location.coordinates[0][0].length != 0) {
+                        if (after) {
+                            this.myLocations.push({
+                                lng: product.location.coordinates[0][0][0],
+                                lat: product.location.coordinates[0][0][1]
+                            });
+                            this.myLocations.push({
+                                lng: product.location.coordinates[0][1][0],
+                                lat: product.location.coordinates[0][1][1]
+                            });
+                            this.myLocations.push({
+                                lng: product.location.coordinates[0][2][0],
+                                lat: product.location.coordinates[0][2][1]
+                            });
+                            this.myLocations.push({
+                                lng: product.location.coordinates[0][3][0],
+                                lat: product.location.coordinates[0][3][1]
+                            });
+                            this.latitude_p = product.location.coordinates[0][3][1];
+                            this.longitude_p = product.location.coordinates[0][3][0];
+                            this.locationChosen = true;
+                            this.loaded = true;
+                        }
+                        // this.latitude_p = 27.699587;
+                        // this.longitude_p = 85.31663;
+                        // this.locationChosen = false;
+                        // this.loaded = true;
+                        // } else {
+                        //     this.latitude_p = 27.699587;
+                        //     this.longitude_p = 85.31663;
+                        //     this.locationChosen = false;
+                        //     this.loaded = true;
+                        // }
+                    }
+                    if (!this.latitude_p) {
+                        this.latitude_p = 27.699587;
+                        this.longitude_p = 85.31663;
+                        this.locationChosen = false;
+                        this.loaded = true;
+                    }
+
+                    // } else {
+                    //     this.latitude_p = 27.699587;
+                    //     this.longitude_p = 85.31663;
+                    //     this.locationChosen = false;
+                    //     this.loaded = true;
+                    // }
+
                     this.imageDisplay = product.image;
                     if (product.images) {
                         // for(let i=0;i<product.images.length;i++){
@@ -255,6 +368,80 @@ export class ProductsFormComponent implements OnInit, OnDestroy {
 
     get productForm() {
         return this.form.controls;
+    }
+
+    onLocUpdate() {
+        console.log(this.currentCategoryId);
+        const sndData = {
+            category: this.currentCategoryId,
+            a1: this.myLocations[1].lng,
+            a2: this.myLocations[1].lat,
+            b1: this.myLocations[2].lng,
+            b2: this.myLocations[2].lat,
+            c1: this.myLocations[3].lng,
+            c2: this.myLocations[3].lat,
+            d1: this.myLocations[4].lng,
+            d2: this.myLocations[4].lat
+        };
+        // console.log(this.myLocations[1].lat);
+        // console.log(this.myLocations[1].lng);
+        // console.log(this.myLocations);
+        this._updateLoc(sndData);
+    }
+
+    private _updateLoc(product: any) {
+        this.productsService
+            .updateGeoLocation(product, this.currentProductId)
+            .pipe(takeUntil(this.endsubs$))
+            .subscribe(
+                () => {
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: 'Success',
+                        detail: 'Product availability location updated!'
+                    });
+                },
+                () => {
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: 'Error',
+                        detail: 'Location is not updated!'
+                    });
+                }
+            );
+    }
+
+    onClear() {
+        this.myLocations = [1];
+    }
+
+    onDel() {
+        const emptyData = {
+            category: this.currentCategoryId
+        };
+        this._delLoc(emptyData);
+    }
+
+    private _delLoc(product: any) {
+        this.productsService
+            .delGeoLocation(product, this.currentProductId)
+            .pipe(takeUntil(this.endsubs$))
+            .subscribe(
+                () => {
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: 'Success',
+                        detail: 'Product availability location deleted!'
+                    });
+                },
+                () => {
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: 'Error',
+                        detail: 'Location is not deleted!'
+                    });
+                }
+            );
     }
 }
 

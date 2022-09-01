@@ -40,6 +40,8 @@ import { OrdersDetailComponent } from './pages/orders/orders-detail/orders-detai
 import { FieldsetModule } from 'primeng/fieldset';
 import { AppRoutingModule } from './app-routing.module';
 
+import { AgmCoreModule } from '@agm/core';
+
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { NgxStripeModule } from 'ngx-stripe';
@@ -83,6 +85,9 @@ const UX_MODULE = [
         OrdersDetailComponent
     ],
     imports: [
+        AgmCoreModule.forRoot({
+            apiKey: 'AIzaSyAhYG3y_QQQHJK9vYYTqkRDhs3ES5Dghhk'
+        }),
         BrowserModule,
         FormsModule,
         BrowserAnimationsModule,

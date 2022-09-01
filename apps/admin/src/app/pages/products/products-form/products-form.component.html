@@ -183,6 +183,22 @@
                             >Description is required!</small
                         >
                     </div>
+
+                    <div class="field">
+                        <label for="keywords">Keywords</label> <br />
+                        <textarea
+                            pInputTextarea
+                            formControlName="keywords"
+                            [rows]="7"
+                            [cols]="120"
+                        ></textarea>
+                        <br />
+                        <small
+                            *ngIf="productForm.keywords.invalid && isSubmitted"
+                            class="p-error"
+                            >Keyword is required! and minlength is 3</small
+                        >
+                    </div>
                     <div class="field">
                         <label for="richDescription">Product Details</label> <br />
                         <p-editor
@@ -231,6 +247,53 @@
                             <img style="width: 80px" [src]="imageDisplay1" alt="" />
                             <br />
                         </div>
+                    </div>
+                    <br />
+                    <div *ngIf="editMode">
+                        <h2>Map Product Visibility</h2>
+                        <div class="p-toolbar-group-left">
+                            <p-button
+                                styleClass="p-button-primary mr-2"
+                                label="Update"
+                                icon="pi pi-plus"
+                                (click)="onLocUpdate()"
+                            ></p-button>
+                            <p-button
+                                styleClass="p-button-secondary mr-2"
+                                label="Clear"
+                                icon="pi pi-trash"
+                                (click)="onClear()"
+                            ></p-button>
+                            <p-button
+                                styleClass="p-button-danger"
+                                label="Delete"
+                                icon="pi pi-trash"
+                                (click)="onDel()"
+                            ></p-button>
+                        </div>
+                        <br />
+                        <agm-map
+                            *ngIf="loaded"
+                            [zoom]="13"
+                            [latitude]="latitude_p"
+                            [longitude]="longitude_p"
+                            (mapClick)="onChooseLocation($event)"
+                        >
+                            <!-- <agm-marker
+                                *ngIf="locationChosen"
+                                [latitude]="latitude_p"
+                                [longitude]="longitude_p"
+                            >
+                            </agm-marker>
+                        </agm-map> -->
+                            <agm-marker
+                                *ngFor="let loc of myLocations.slice(1)"
+                                [latitude]="loc.lat"
+                                [longitude]="loc.lng"
+                                [agmFitBounds]="true"
+                            >
+                            </agm-marker>
+                        </agm-map>
                     </div>
                 </form>
             </div>

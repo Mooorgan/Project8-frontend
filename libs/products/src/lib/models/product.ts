@@ -19,4 +19,10 @@ export class Product {
     numReviews?: number;
     isFeatured?: boolean;
     dateCreated?: string;
+    location?: {
+        type?: string;
+        coordinates?: any;
+    };
+    keywords?: string[];
+    reviews?: { name: string; review: string }[];
 }
