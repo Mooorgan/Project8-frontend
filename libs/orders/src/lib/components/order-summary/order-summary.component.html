@@ -2,7 +2,7 @@
     <h3>Order Summary</h3>
     <div class="summary-price">
         <span>Items Price</span>
-        <span>{{ totalPrice | currency }}</span>
+        <span>{{ totalPrice | currency: 'INR':'symbol' }}</span>
     </div>
     <div class="summary-price">
         <span>Packing & Shipping</span>
@@ -11,7 +11,7 @@
     <div class="to-checkout">
         <div class="summary-price">
             <span>Total Price</span>
-            <span>{{ totalPrice | currency }}</span>
+            <span>{{ totalPrice | currency: 'INR':'symbol' }}</span>
         </div>
         <div class="checkout-button" *ngIf="!isCheckout">
             <p-button label="Checkout" (onClick)="navigateToCheckout()"></p-button>

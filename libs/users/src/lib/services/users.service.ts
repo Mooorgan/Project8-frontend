@@ -80,6 +80,7 @@ export class UsersService {
     }
 
     updateLocation(user: any): Observable<User> {
+        console.log(user);
         return this.http.put<any>(`${this.apiURLUsers}/locate/${user.id}`, user);
     }
 }

@@ -78,4 +78,11 @@ export class OrdersService {
     getUserOrders(userID: string): Observable<Order[]> {
         return this.http.get<Order[]>(`${this.apiURLOrders}/get/userorders/${userID}`);
     }
+
+    createKhalti(data: any): Observable<any> {
+        return this.http.post<any>(
+            `${this.apiURLOrders}/create-checkout-session-khalti`,
+            data
+        );
+    }
 }

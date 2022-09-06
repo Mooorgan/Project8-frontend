@@ -23,6 +23,7 @@ export class ProductsFormComponent implements OnInit, OnDestroy {
     currentCategoryId;
     endsubs$: Subject<any> = new Subject();
     loaded = false;
+    loaded1 = false;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -68,18 +69,18 @@ export class ProductsFormComponent implements OnInit, OnDestroy {
         console.log(this.myLocations.length);
         console.log(this.myLocations);
 
-        const test = {
-            coordinates: [
-                [
-                    [85.299448, 27.736671],
-                    [85.364723, 27.726947],
-                    [85.351668, 27.65946],
-                    [85.27059, 27.663109],
-                    [85.299448, 27.736671]
-                ]
-            ]
-        }; 
-        console.log(test.coordinates[0][0][1]);
+        // const test = {
+        //     coordinates: [
+        //         [
+        //             [85.299448, 27.736671],
+        //             [85.364723, 27.726947],
+        //             [85.351668, 27.65946],
+        //             [85.27059, 27.663109],
+        //             [85.299448, 27.736671]
+        //         ]
+        //     ]
+        // }; 
+        // console.log(test.coordinates[0][0][1]);
         
 
         
@@ -87,6 +88,26 @@ export class ProductsFormComponent implements OnInit, OnDestroy {
         // this.longitude_p = event.coords.lng;
         this.locationChosen = true;
         // console.log(event);
+    }
+
+    latitude_p1;
+    longitude_p1;
+    locationChosen1 = false;
+
+    myLocations1: Array<any> = [1];
+
+    onChooseLocation1(event) {
+        if (this.myLocations1.length == 5 || this.myLocations1.length > 5) {
+            return;
+        }
+        this.myLocations1.push({
+            lat: event.coords.lat,
+            lng: event.coords.lng
+        });
+
+        console.log(this.myLocations1.length);
+        console.log(this.myLocations1);
+        this.locationChosen1 = true;
     }
 
     private _initForm() {
@@ -173,7 +194,6 @@ export class ProductsFormComponent implements OnInit, OnDestroy {
 
     private _checkEditMode() {
         this.route.params.pipe(takeUntil(this.endsubs$)).subscribe((params) => {
-            console.log('hellfsdjfsldkjfsldkjf');
             if (params.id) {
                 this.editMode = true;
                 this.currentProductId = params.id;
@@ -193,7 +213,6 @@ export class ProductsFormComponent implements OnInit, OnDestroy {
                     this.productForm.description.setValue(product.description);
                     this.productForm.keywords.setValue(product.keywords);
                     this.productForm.richDescription.setValue(product.richDescription);
-                    console.log('sldkjfslkdjflskdjflsdkjf');
                     // console.log(product.location.coordinates.length);
                     // console.log(product.location.coordinates.length);
                     // console.log(product.location.coordinates[0][0].length);
@@ -202,6 +221,7 @@ export class ProductsFormComponent implements OnInit, OnDestroy {
                     // console.log('hellodsicfjsdofjsodjf');
                     // if (product.location.coordinates.length != 0) {
                     const after = product.location?.coordinates;
+                    const afterp = product.plocation?.coordinates;
                     console.log(after, 'after---------------------');
                     if (after) {
                         console.log('inside!!!');
@@ -245,13 +265,37 @@ export class ProductsFormComponent implements OnInit, OnDestroy {
                         this.locationChosen = false;
                         this.loaded = true;
                     }
+                    //-----------------------------------------------------------------------------------------------------
+                    if (afterp) {
+                        this.myLocations1.push({
+                            lng: product.plocation.coordinates[0][0][0],
+                            lat: product.plocation.coordinates[0][0][1]
+                        });
+                        this.myLocations1.push({
+                            lng: product.plocation.coordinates[0][1][0],
+                            lat: product.plocation.coordinates[0][1][1]
+                        });
+                        this.myLocations1.push({
+                            lng: product.plocation.coordinates[0][2][0],
+                            lat: product.plocation.coordinates[0][2][1]
+                        });
+                        this.myLocations1.push({
+                            lng: product.plocation.coordinates[0][3][0],
+                            lat: product.plocation.coordinates[0][3][1]
+                        });
+                        this.latitude_p1 = product.plocation.coordinates[0][3][1];
+                        this.longitude_p1 = product.plocation.coordinates[0][3][0];
+                        this.locationChosen1 = true;
+                        this.loaded1 = true;
+                    }
 
-                    // } else {
-                    //     this.latitude_p = 27.699587;
-                    //     this.longitude_p = 85.31663;
-                    //     this.locationChosen = false;
-                    //     this.loaded = true;
-                    // }
+                    if (!this.latitude_p1) {
+                        this.latitude_p1 = 27.699587;
+                        this.longitude_p1 = 85.31663;
+                        this.locationChosen1 = false;
+                        this.loaded1 = true;
+                        console.log(this.loaded1, 'This is loaded 1');
+                    }
 
                     this.imageDisplay = product.image;
                     if (product.images) {
@@ -439,6 +483,80 @@ export class ProductsFormComponent implements OnInit, OnDestroy {
                         severity: 'error',
                         summary: 'Error',
                         detail: 'Location is not deleted!'
+                    });
+                }
+            );
+    }
+
+    onLocUpdate1() {
+        console.log(this.currentCategoryId);
+        const sndData = {
+            category: this.currentCategoryId,
+            pa1: this.myLocations1[1].lng,
+            pa2: this.myLocations1[1].lat,
+            pb1: this.myLocations1[2].lng,
+            pb2: this.myLocations1[2].lat,
+            pc1: this.myLocations1[3].lng,
+            pc2: this.myLocations1[3].lat,
+            pd1: this.myLocations1[4].lng,
+            pd2: this.myLocations1[4].lat
+        };
+        // console.log(this.myLocations[1].lat);
+        // console.log(this.myLocations[1].lng);
+        // console.log(this.myLocations);
+        this._updateLoc1(sndData);
+    }
+
+    private _updateLoc1(product: any) {
+        this.productsService
+            .updateGeopLocation(product, this.currentProductId)
+            .pipe(takeUntil(this.endsubs$))
+            .subscribe(
+                () => {
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: 'Success',
+                        detail: 'Dynamic pricing location updated!'
+                    });
+                },
+                () => {
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: 'Error',
+                        detail: 'Dynamic pricing location not updated!'
+                    });
+                }
+            );
+    }
+
+    onClear1() {
+        this.myLocations1 = [1];
+    }
+
+    onDel1() {
+        const emptyData = {
+            category: this.currentCategoryId
+        };
+        this._delLoc1(emptyData);
+    }
+
+    private _delLoc1(product: any) {
+        this.productsService
+            .delGeopLocation(product, this.currentProductId)
+            .pipe(takeUntil(this.endsubs$))
+            .subscribe(
+                () => {
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: 'Success',
+                        detail: 'Dynamic pricing location deleted!'
+                    });
+                },
+                () => {
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: 'Error',
+                        detail: 'Dynamic pricing location not deleted!'
                     });
                 }
             );

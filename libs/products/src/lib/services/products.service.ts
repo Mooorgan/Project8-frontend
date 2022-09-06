@@ -70,6 +70,24 @@ export class ProductsService {
         );
     }
 
+    updateGeopLocation(productData: any, productId: string): Observable<Product> {
+        console.log(productData, productId);
+
+        return this.http.put<any>(
+            `${this.apiURLProducts}/geop/${productId}`,
+            productData
+        );
+    }
+
+    delGeopLocation(productData: any, productId: string): Observable<Product> {
+        console.log(productData, productId);
+
+        return this.http.put<any>(
+            `${this.apiURLProducts}/delgeop/${productId}`,
+            productData
+        );
+    }
+
     updateRating(productData: any, productId: string): Observable<Product> {
         console.log(productData, productId);
 

@@ -18,6 +18,7 @@ import { ThankYouComponent } from './pages/thank-you/thank-you.component';
 import { AuthGuardCustomerService } from '@bluebits/users';
 
 import { AgmCoreModule } from '@agm/core';
+// import KhaltiCheckout from 'khalti-checkout-web';
 
 export const routes: Route[] = [
     {
@@ -51,6 +52,7 @@ export const routes: Route[] = [
         FormsModule,
         ReactiveFormsModule,
         RouterModule.forChild(routes)
+        // KhaltiCheckout
     ],
     declarations: [
         CartIconComponent,

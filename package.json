@@ -30,6 +30,7 @@
         "@stripe/stripe-js": "^1.32.0",
         "animate.css": "^4.1.1",
         "i18n-iso-countries": "^7.5.0",
+        "khalti-checkout-web": "^2.2.0",
         "ngx-stripe": "^12.8.2",
         "normalize.css": "^8.0.1",
         "primeflex": "^3.2.1",

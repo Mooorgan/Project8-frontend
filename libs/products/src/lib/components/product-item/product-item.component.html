@@ -7,14 +7,16 @@
             alt="{{ product.name }}"
         />
         <h4 class="name">{{ product.name }}</h4>
-        <h5 class="price">{{ product.price | currency }}</h5>
-        <p-button
+        <h5 class="price"></h5>
+        <!-- <p-button
             *ngIf="available"
             styleClass="mt-3 add-to-cart"
             label="Add to Cart"
             icon="pi pi-shopping-cart"
             (onClick)="addProductToCart()"
-        ></p-button>
+        ></p-button> -->
         <h2 *ngIf="!available">Out Of Stock</h2>
     </div>
 </div>
+
+<!-- {{ product.price | currency }} -->

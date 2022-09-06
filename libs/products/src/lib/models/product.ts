@@ -19,7 +19,13 @@ export class Product {
     numReviews?: number;
     isFeatured?: boolean;
     dateCreated?: string;
+    geography?: string;
     location?: {
+        type?: string;
+        coordinates?: any;
+    };
+    pgeography?: string;
+    plocation?: {
         type?: string;
         coordinates?: any;
     };

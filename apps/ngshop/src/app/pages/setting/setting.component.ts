@@ -193,8 +193,10 @@ export class SettingComponent implements OnInit, OnDestroy {
             // this.userForm.latitude.setValue(user.latitude);
             // this.userForm.longitude.setValue(user.longitude);
 
-            this.latitude_p = +user.latitude;
-            this.longitude_p = +user.longitude;
+            // this.latitude_p = +user.latitude;
+            this.latitude_p = +user.userlocation.coordinates[1];
+            // this.longitude_p = +user.longitude;
+            this.longitude_p = +user.userlocation.coordinates[0];
             this.locationChosen = true;
             this.loaded = true;
             this.userForm.password.setValidators([]);

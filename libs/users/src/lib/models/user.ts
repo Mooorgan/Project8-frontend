@@ -13,4 +13,8 @@ export class User {
     country?: string;
     latitude?: string;
     longitude?: string;
+    userlocation?: {
+        type?: string;
+        coordinates?: any;
+    };
 }

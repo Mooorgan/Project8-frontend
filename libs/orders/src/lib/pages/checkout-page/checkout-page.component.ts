@@ -10,6 +10,8 @@ import { OrdersService } from '../../services/orders.service';
 import { ORDER_STATUS } from '../../orders.constants';
 import { Subject, take, takeUntil } from 'rxjs';
 import { StripeService } from 'ngx-stripe';
+import KhaltiCheckout from 'khalti-checkout-web';
+import { ThankYouComponent } from '../thank-you/thank-you.component';
 
 @Component({
     selector: 'orders-checkout-page',
@@ -25,6 +27,7 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
     latitude_p = 27.673007134040933;
     longitude_p = 85.31179482383641;
     locationChosen = false;
+    endSubs$: Subject<any> = new Subject();
 
     constructor(
         private router: Router,
@@ -40,10 +43,12 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
         this._autoFillUserData();
         this._getCartItems();
         this._getCountries();
+        this._getOrderSummary();
     }
 
     ngOnDestroy(): void {
         this.unsubscribe$.complete();
+        this.endSubs$.complete();
     }
 
     // prettier-ignore
@@ -142,6 +147,98 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
         this.ordersService.createCheckoutSession(this.orderItems).subscribe((error) => {
             if (error) {
                 console.log('Error in redirect to payment');
+            }
+        });
+    }
+
+    placeOrderKhalti() {
+        this.isSubmitted = true;
+        if (this.checkoutFormGroup.invalid) {
+            return;
+        }
+
+        const order: Order = {
+            orderItems: this.orderItems,
+            shippingAddress1: this.checkoutForm.street.value,
+            shippingAddress2: this.checkoutForm.apartment.value,
+            city: this.checkoutForm.city.value,
+            zip: this.checkoutForm.zip.value,
+            country: this.checkoutForm.country.value,
+            phone: this.checkoutForm.phone.value,
+            status: 0,
+            user: this.userId,
+            dateOrdered: `${Date.now()}`,
+            longitude: this.checkoutForm.longitude.value,
+            latitude: this.checkoutForm.latitude.value
+        };
+
+        this.ordersService.cacheOrderData(order);
+
+        const that = this.ordersService;
+        const thatRouter = this.router;
+        //-----------------------------------------------------------------------------------
+        const uniqueId = Date.now();
+        let config = {
+            // replace this key with yours
+            publicKey: 'test_public_key_728030d987bf437381f0a8e6e3d2391e',
+            productIdentity: uniqueId.toString(),
+            productName: 'Product1',
+            productUrl: 'http://localhost:4200/',
+            eventHandler: {
+                onSuccess(payload) {
+                    // hit merchant api for initiating verfication
+                    console.log(payload, 'frontend success');
+                    const info = {
+                        token: payload.token,
+                        amount: payload.amount
+                    };
+
+                    that.createKhalti(info).subscribe(
+                        (res) => {
+                            console.log(res, 'backend success');
+                            thatRouter.navigate(['/success']);
+                        },
+                        (err) => {
+                            console.log(err, 'backend error');
+                        }
+                    );
+                },
+                // onError handler is optional
+                onError(error) {
+                    // handle errors
+                    console.log(error, 'frontend error');
+                },
+                onClose() {
+                    console.log('widget is closing');
+                }
+            },
+            paymentPreference: [
+                'KHALTI',
+                'EBANKING',
+                'MOBILE_BANKING',
+                'CONNECT_IPS',
+                'SCT'
+            ]
+        };
+
+        let checkout = new KhaltiCheckout(config);
+        checkout.show({ amount: this.totalPrice * 100 });
+    }
+
+    totalPrice;
+
+    _getOrderSummary() {
+        this.cartService.cart$.pipe(takeUntil(this.endSubs$)).subscribe((cart) => {
+            this.totalPrice = 0;
+            if (cart) {
+                cart.items.map((item) => {
+                    this.ordersService
+                        .getProduct(item.productId)
+                        .pipe(take(1))
+                        .subscribe((product) => {
+                            this.totalPrice += product.price * item.quantity;
+                        });
+                });
             }
         });
     }

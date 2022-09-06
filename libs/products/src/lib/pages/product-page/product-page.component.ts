@@ -19,7 +19,7 @@ export class ProductPageComponent implements OnInit, OnDestroy {
     available = true;
     notLoggedIn = true;
     model = 1;
-    text = 'Write Something...';
+    text = '';
     arrayReviews;
     initial;
 
