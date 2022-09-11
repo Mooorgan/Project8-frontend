@@ -59,9 +59,9 @@ export class UsersFormComponent implements OnInit, OnDestroy {
             apartment: ['', Validators.required],
             zip: ['', [Validators.required]],
             city: ['', Validators.required],
-            country: ['', Validators.required]
-            // latitude: ['', Validators.required],
-            // longitude: ['', Validators.required]
+            country: ['', Validators.required],
+            latitude: ['', Validators.required],
+            longitude: ['', Validators.required]
         });
     }
 
@@ -86,15 +86,18 @@ export class UsersFormComponent implements OnInit, OnDestroy {
              };
              console.log(event.coords.lng);
              console.log(event.coords.lat);
-             this._updateLocation(location);
+             if(this.editmode){
+
+                 this._updateLocation(location);
+             }
          }
 
 
         this.longitude_p = event.coords.lng;
         this.latitude_p = event.coords.lat;
         // prettier-ignore
-        // this.userForm.latitude.patchValue(event.coords.lat);
-        // this.userForm.longitude.patchValue(event.coords.lng);
+        this.userForm.latitude.patchValue(event.coords.lat);
+        this.userForm.longitude.patchValue(event.coords.lng);
         // this.form.patchValue({
         //     latitude: event.coords.lat,
         //     longitude:event.coords.lng,
@@ -105,6 +108,7 @@ export class UsersFormComponent implements OnInit, OnDestroy {
         this.locationChosen = true;
         // console.log(this.userForm);
         console.log(event);
+        
     }
 
     private _getCountries() {
@@ -192,8 +196,8 @@ export class UsersFormComponent implements OnInit, OnDestroy {
                     this.userForm.zip.setValue(user.zip);
                     this.userForm.city.setValue(user.city);
                     this.userForm.country.setValue(user.country);
-                    // this.userForm.latitude.setValue(user.latitude);
-                    // this.userForm.longitude.setValue(user.longitude);
+                    this.userForm.latitude.setValue(user.userlocation.coordinates[1]);
+                    this.userForm.longitude.setValue(user.userlocation.coordinates[0]);
 
                     // this.latitude_p = +user.latitude;
                     this.latitude_p = +user.userlocation.coordinates[1];
@@ -213,14 +217,6 @@ export class UsersFormComponent implements OnInit, OnDestroy {
     }
 
     onSubmit() {
-        if (!this.longitude_p) {
-            this.messageService.add({
-                severity: 'error',
-                summary: 'Error',
-                detail: 'Location is required!'
-            });
-            return;
-        }
         this.isSubmitted = true;
         if (this.form.invalid) {
             return;
@@ -236,9 +232,9 @@ export class UsersFormComponent implements OnInit, OnDestroy {
             apartment: this.userForm.apartment.value,
             zip: this.userForm.zip.value,
             city: this.userForm.city.value,
-            country: this.userForm.country.value
-            // latitude: this.userForm.latitude.value,
-            // longitude: this.userForm.longitude.value
+            country: this.userForm.country.value,
+            latitude: this.userForm.latitude.value,
+            longitude: this.userForm.longitude.value
         };
         if (this.editmode) {
             if (this.userForm.password.value) {

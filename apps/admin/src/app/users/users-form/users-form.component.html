@@ -86,7 +86,7 @@
                             <small
                                 *ngIf="userForm.phone.invalid && isSubmitted"
                                 class="p-error"
-                                >phone is required</small
+                                >Phone is required</small
                             >
                         </div>
                         <div class="field col-4">
@@ -103,6 +103,11 @@
                                 type="text"
                                 pInputText
                             />
+                            <small
+                                *ngIf="userForm.street.invalid && isSubmitted"
+                                class="p-error"
+                                >Street is required</small
+                            >
                         </div>
                         <div class="field col-4">
                             <label for="street">Apartment</label>
@@ -112,6 +117,11 @@
                                 type="text"
                                 pInputText
                             />
+                            <small
+                                *ngIf="userForm.apartment.invalid && isSubmitted"
+                                class="p-error"
+                                >Apartment is required</small
+                            >
                         </div>
                         <div class="field col-4">
                             <label for="street">Zip Code</label>
@@ -121,6 +131,11 @@
                                 type="text"
                                 pInputText
                             />
+                            <small
+                                *ngIf="userForm.zip.invalid && isSubmitted"
+                                class="p-error"
+                                >Zip is required</small
+                            >
                         </div>
                         <div class="field col-4">
                             <label for="city">City</label>
@@ -130,6 +145,11 @@
                                 type="text"
                                 pInputText
                             />
+                            <small
+                                *ngIf="userForm.city.invalid && isSubmitted"
+                                class="p-error"
+                                >City is required</small
+                            >
                         </div>
                         <div class="field col-4">
                             <label for="country">Country</label><br />
@@ -143,16 +163,21 @@
                                 [showClear]="true"
                                 placeholder="Select a Country"
                             ></p-dropdown>
+                            <small
+                                *ngIf="userForm.country.invalid && isSubmitted"
+                                class="p-error"
+                                >Country is required</small
+                            >
                         </div>
                     </div>
                     <h2>Mark your Location</h2>
                     <br />
-                    <!-- <small
+                    <small
                         *ngIf="userForm.latitude.invalid && isSubmitted"
                         class="p-error"
                         >Location is required!</small
                     >
-                    <br /> -->
+                    <br />
                     <agm-map
                         *ngIf="loaded"
                         [zoom]="13"

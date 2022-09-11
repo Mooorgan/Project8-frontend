@@ -22,7 +22,7 @@
                     ></p-dropdown>
                 </div>
                 <div class="col-4">
-                    <h5>Order Total Price</h5>
+                    <h5>Order Total Price(Final price paid at that time)</h5>
                     <p>{{ order.totalPrice | currency: 'INR':'symbol' }}</p>
                 </div>
             </div>
@@ -34,7 +34,7 @@
                 <div class="col-2 font-bold">Category</div>
                 <div class="col-2 font-bold">Price</div>
                 <div class="col-2 font-bold">Quantity</div>
-                <div class="col-2 font-bold">Subtotal</div>
+                <div class="col-2 font-bold">Subtotal(Present Price)</div>
             </div>
             <div class="grid mb-5" *ngFor="let orderItem of order.orderItems">
                 <div class="col-2">{{ orderItem.product.name }}</div>
@@ -52,7 +52,9 @@
                 </div>
             </div>
             <div class="grid" style="color: green">
-                <div class="col-2 col-offset-8 font-bold">Total Price</div>
+                <div class="col-2 col-offset-8 font-bold">
+                    Total Price(Final price paid)
+                </div>
                 <div class="col-2 font-bold">
                     {{ order.totalPrice | currency: 'INR':'symbol' }}
                 </div>
